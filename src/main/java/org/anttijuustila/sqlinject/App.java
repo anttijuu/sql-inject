@@ -2,6 +2,9 @@ package org.anttijuustila.sqlinject;
 
 import javax.swing.JFrame;
 
+import org.anttijuustila.sqlinject.model.Database;
+import org.anttijuustila.sqlinject.model.DatabaseInterface;
+
 /**
  * Hello world!
  *
@@ -9,6 +12,7 @@ import javax.swing.JFrame;
 public class App 
 {
     private JFrame mainFrame;
+    DatabaseInterface database;
     
     public static void main( String[] args )
     {
@@ -16,6 +20,7 @@ public class App
     }
 
     private void run() {
+        database = new Database();
 
     }
 }

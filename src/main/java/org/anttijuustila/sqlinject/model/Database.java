@@ -14,13 +14,13 @@ import java.util.List;
 
 import org.apache.commons.codec.digest.Crypt;
 
-public class Database {
+public class Database implements DatabaseInterface {
 	
 	private Connection connection = null;
-	private static Database singleton = null;
+	private static DatabaseInterface singleton = null;
 	private SecureRandom secureRandom = null;
 
-	public static synchronized Database getInstance() {
+	public static synchronized DatabaseInterface getInstance() {
 		if (null == singleton) {
 			singleton = new Database();
 		}
@@ -31,6 +31,7 @@ public class Database {
 		secureRandom = new SecureRandom();
 	}
 
+	@Override
 	public void open(String dbName) throws SQLException {
 		boolean createDatabase = false;
 		File file = new File(dbName);
@@ -44,6 +45,7 @@ public class Database {
 		}
 	}
 
+	@Override
 	public void close() {
 		if (null != connection) {
 			try {
@@ -56,6 +58,7 @@ public class Database {
 		}
 	}
 
+	@Override
 	public List<User> getAllUsers() {
 		List<User> users = new ArrayList<>();
 		if (null != connection) {
@@ -77,6 +80,7 @@ public class Database {
 		return users;
 	}
 
+	@Override
 	public boolean addUser(User user) throws SQLException {
 		boolean result = false;
 		if (null != connection && !isUserNameRegistered(user.getName())) {
@@ -101,6 +105,7 @@ public class Database {
 		return result;
 	}
 
+	@Override
 	public boolean isUserNameRegistered(String username) {
 		boolean result = false;
 		if (null != connection) {
@@ -126,6 +131,7 @@ public class Database {
 		return result;
 	}
 
+	@Override
 	public boolean isRegisteredUser(String username, String password) {
 		boolean result = false;
 		PreparedStatement queryStatement = null;
