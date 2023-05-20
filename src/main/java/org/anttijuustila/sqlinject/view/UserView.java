@@ -24,6 +24,7 @@ public class UserView extends JPanel implements ActionListener, UsersModelObserv
 	private JLabel uuidLabel;
 	private JTextField nameText;
 	private JTextField emailText;
+	private JTextField passWordText;
 
 	private JButton saveButton;
 	private JButton newButton;
@@ -46,6 +47,9 @@ public class UserView extends JPanel implements ActionListener, UsersModelObserv
 		emailText = new JTextField("");
 		emailText.setPreferredSize(new Dimension(256, 20));
 		editorsPanel.add(emailText);
+		passWordText = new JTextField("");
+		passWordText.setPreferredSize(new Dimension(256, 20));
+		editorsPanel.add(passWordText);
 
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
@@ -67,10 +71,12 @@ public class UserView extends JPanel implements ActionListener, UsersModelObserv
 			uuidLabel.setText(user.getId());
 			nameText.setText(user.getName());
 			emailText.setText(user.getEmail());
+			passWordText.setText(user.getPassword());
 		} else {
 			uuidLabel.setText("No user selected");
 			nameText.setText("");
 			emailText.setText("");
+			passWordText.setText("");
 		}
 	}
 
@@ -80,8 +86,10 @@ public class UserView extends JPanel implements ActionListener, UsersModelObserv
 			if (null != user) {
 				final String name = nameText.getText();
 				final String email = emailText.getText();
+				final String passwd = passWordText.getText();
 				user.setUsername(name);
 				user.setEmail(email);
+				user.setPassword(passwd);
 				try {
 					model.update(user);
 				} catch (SQLException e1) {
@@ -94,7 +102,8 @@ public class UserView extends JPanel implements ActionListener, UsersModelObserv
 			if (null != user) {
 				final String name = nameText.getText();
 				final String email = emailText.getText();
-				User newUser = new User(name, "", email);
+				final String passwd = passWordText.getText();
+				User newUser = new User(name, passwd, email);
 				try {
 					model.add(newUser);
 				} catch (SQLException e1) {

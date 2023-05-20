@@ -46,8 +46,13 @@ public class User {
         this.email = email;
     }
 
+    public void setPassword(String passwd) {
+        this.password = passwd;
+	}
+
     @Override
     public String toString() {
         return String.format("%s (%s)", username, email);
     }
+
 }

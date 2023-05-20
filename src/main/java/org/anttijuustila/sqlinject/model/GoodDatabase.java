@@ -77,10 +77,11 @@ public class GoodDatabase implements DatabaseInterface {
 				PreparedStatement queryStatement = connection.prepareStatement(queryUser);
 				ResultSet rs = queryStatement.executeQuery();
 				while (rs.next()) {
-					String id = rs.getString("id");
-					String user = rs.getString("name");
-					String email = rs.getString("email");
-					User aUser = new User(id, user, "", email);
+					final String id = rs.getString("id");
+					final String user = rs.getString("name");
+					final String email = rs.getString("email");
+					final String pw = rs.getString("passwd");
+					User aUser = new User(id, user, pw, email);
 					users.add(aUser);
 				}
 				queryStatement.close();
@@ -120,7 +121,7 @@ public class GoodDatabase implements DatabaseInterface {
 	@Override
 	public boolean saveUser(User user) throws SQLException {
 		boolean result = false;
-		if (null != connection && !isUserNameRegistered(user.getName())) {
+		if (null != connection) {
 			String hashedPassword = user.getPassword();
 			if (hashedPassword.length() > 0) {
 				long timestamp = System.currentTimeMillis();
@@ -141,7 +142,7 @@ public class GoodDatabase implements DatabaseInterface {
 			statement.close();
 			result = true;
 		} else {
-			System.out.println("User already registered: " + user.getName());
+			System.out.println("No connection to db");
 		}
 		return result;
 	}
