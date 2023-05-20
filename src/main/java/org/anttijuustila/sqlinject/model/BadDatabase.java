@@ -35,7 +35,17 @@ public class BadDatabase implements DatabaseInterface {
 		connection = DriverManager.getConnection(database);
 		if (createBadDatabase) {
 			initializeBadDatabase();
+			addTestUsers();
 		}
+	}
+
+	private void addTestUsers() throws SQLException {
+		User user = new User("Antti", "password", "antti@oulu.fi");
+		addUser(user);
+		user = new User("Jouni", "kalakana", "jouni@oulu.fi");
+		addUser(user);
+		user = new User("Mikko", "123456", "jouni@oulu.fi");
+		addUser(user);
 	}
 
 	public void close() {
@@ -55,7 +65,7 @@ public class BadDatabase implements DatabaseInterface {
 		List<User> users = new ArrayList<>();
 		if (null != connection) {
 			try {
-				String queryUser = "select * from users";
+				String queryUser = "select * from user";
 				Statement queryStatement = connection.createStatement();
 				ResultSet rs = queryStatement.executeQuery(queryUser);
 				while (rs.next()) {
@@ -75,7 +85,7 @@ public class BadDatabase implements DatabaseInterface {
 	public boolean addUser(User user) throws SQLException {
 		boolean result = false;
 		if (null != connection && !isUserNameRegistered(user.getName())) {
-			String sqlStatement = "insert into users (name, passwd, email) values ('";
+			String sqlStatement = "insert into user (name, passwd, email) values ('";
 			sqlStatement += user.getName() + "', '";
 			sqlStatement += user.getPassword() + "', '";
 			sqlStatement += user.getEmail() + "')";
@@ -89,13 +99,30 @@ public class BadDatabase implements DatabaseInterface {
 		return result;
 	}
 
+	@Override
+	public boolean saveUser(User user) throws SQLException {
+		boolean result = false;
+		if (null != connection && !isUserNameRegistered(user.getName())) {
+			String updateUser = "update user set name='" + user.getName();
+			updateUser += "', passwd='" + user.getPassword();
+			updateUser += "', email='" +user.getEmail();
+			updateUser += "' where id='" + user.getId() + "'";
+			Statement statement = connection.createStatement();
+			statement.executeQuery(updateUser);
+			statement.close();
+			result = true;
+		} else {
+			System.out.println("User already registered: " + user.getName());
+		}
+		return result;
+	}
 	public boolean isUserNameRegistered(String username) {
 		boolean result = false;
 		if (null != connection) {
 			try {
-				String queryUser = "select name from users where name = '" + username + "'";
+				String queryUser = "select name from user where name = '" + username + "'";
 				Statement queryStatement = connection.createStatement();
-				ResultSet rs = queryStatement.executeQuery(username);
+				ResultSet rs = queryStatement.executeQuery(queryUser);
 				while (rs.next()) {
 					String user = rs.getString("name");
 					if (user.equals(username)) {
@@ -118,7 +145,7 @@ public class BadDatabase implements DatabaseInterface {
 		Statement queryStatement = null;
 		if (null != connection) {
 			try {
-				String queryUser = "select name, passwd from users where name = '" + username + "'";
+				String queryUser = "select name, passwd from user where name = '" + username + "'";
 				queryStatement = connection.createStatement();
 				ResultSet rs = queryStatement.executeQuery(queryUser);
 				while (rs.next()) {
@@ -144,7 +171,7 @@ public class BadDatabase implements DatabaseInterface {
 
 	private boolean initializeBadDatabase() throws SQLException {
 		if (null != connection) {
-			String createUsersString = "create table users " + 
+			String createUsersString = "create table user " + 
 					"(name varchar(32) NOT NULL, " +
 					"passwd varchar(32) NOT NULL, " +
 					"email varchar(32) NOT NULL, " +

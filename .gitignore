@@ -3,4 +3,4 @@ target/
 .settings.json
 .launch.json
 .vscode/
-.sqlite
+*.sqlite

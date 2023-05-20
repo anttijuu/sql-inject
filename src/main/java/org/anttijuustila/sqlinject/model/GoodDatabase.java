@@ -14,7 +14,7 @@ import java.util.List;
 
 import org.apache.commons.codec.digest.Crypt;
 
-public class Database implements DatabaseInterface {
+public class GoodDatabase implements DatabaseInterface {
 	
 	private Connection connection = null;
 	private static DatabaseInterface singleton = null;
@@ -22,12 +22,12 @@ public class Database implements DatabaseInterface {
 
 	public static synchronized DatabaseInterface getInstance() {
 		if (null == singleton) {
-			singleton = new Database();
+			singleton = new GoodDatabase();
 		}
 		return singleton;
 	}
 
-	private Database() {	
+	private GoodDatabase() {	
 		secureRandom = new SecureRandom();
 	}
 
@@ -42,7 +42,17 @@ public class Database implements DatabaseInterface {
 		connection = DriverManager.getConnection(database);
 		if (createDatabase) {
 			initializeDatabase();
+			addTestUsers();
 		}
+	}
+
+	private void addTestUsers() throws SQLException {
+		User user = new User("Antti", "password", "antti@oulu.fi");
+		addUser(user);
+		user = new User("Jouni", "kalakana", "jouni@oulu.fi");
+		addUser(user);
+		user = new User("Mikko", "123456", "jouni@oulu.fi");
+		addUser(user);
 	}
 
 	@Override
@@ -63,13 +73,14 @@ public class Database implements DatabaseInterface {
 		List<User> users = new ArrayList<>();
 		if (null != connection) {
 			try {
-				String queryUser = "select * from users";
+				String queryUser = "select * from user";
 				PreparedStatement queryStatement = connection.prepareStatement(queryUser);
 				ResultSet rs = queryStatement.executeQuery();
 				while (rs.next()) {
+					String id = rs.getString("id");
 					String user = rs.getString("name");
 					String email = rs.getString("email");
-					User aUser = new User(user, "", email);
+					User aUser = new User(id, user, "", email);
 					users.add(aUser);
 				}
 				queryStatement.close();
@@ -91,11 +102,41 @@ public class Database implements DatabaseInterface {
 			String hashedPassword = Crypt.crypt(user.getPassword(), salt);
 			long duration = System.currentTimeMillis() - timestamp;
 			System.out.println("Hashing and salting took " + duration + " ms");	
-			String insertUser = "insert into users values (?, ?, ?)";
+			String insertUser = "insert into user values (?, ?, ?, ?)";
 			PreparedStatement statement = connection.prepareStatement(insertUser);
+			statement.setString(1, user.getId());
+			statement.setString(2, user.getName());
+			statement.setString(3, hashedPassword);
+			statement.setString(4, user.getEmail());
+			statement.executeUpdate();
+			statement.close();
+			result = true;
+		} else {
+			System.out.println("User already registered: " + user.getName());
+		}
+		return result;
+	}
+
+	@Override
+	public boolean saveUser(User user) throws SQLException {
+		boolean result = false;
+		if (null != connection && !isUserNameRegistered(user.getName())) {
+			String hashedPassword = user.getPassword();
+			if (hashedPassword.length() > 0) {
+				long timestamp = System.currentTimeMillis();
+				byte[] bytes = new byte[16];
+				secureRandom.nextBytes(bytes);
+				String salt = "$6$" + Base64.getEncoder().encodeToString(bytes);
+				hashedPassword = Crypt.crypt(user.getPassword(), salt);
+				long duration = System.currentTimeMillis() - timestamp;
+				System.out.println("Hashing and salting took " + duration + " ms");		
+			}
+			String updateUser = "update user set name=?, passwd=?, email=? where id = ?";
+			PreparedStatement statement = connection.prepareStatement(updateUser);
 			statement.setString(1, user.getName());
 			statement.setString(2, hashedPassword);
 			statement.setString(3, user.getEmail());
+			statement.setString(4, user.getId());
 			statement.executeUpdate();
 			statement.close();
 			result = true;
@@ -110,7 +151,7 @@ public class Database implements DatabaseInterface {
 		boolean result = false;
 		if (null != connection) {
 			try {
-				String queryUser = "select name from users where name = ?";
+				String queryUser = "select name from user where name = ?";
 				PreparedStatement queryStatement = connection.prepareStatement(queryUser);
 				queryStatement.setString(1, username);
 				ResultSet rs = queryStatement.executeQuery();
@@ -137,11 +178,12 @@ public class Database implements DatabaseInterface {
 		PreparedStatement queryStatement = null;
 		if (null != connection) {
 			try {
-				String queryUser = "select name, passwd from users where name = ?";
+				String queryUser = "select name, passwd from user where name = ?";
 				queryStatement = connection.prepareStatement(queryUser);
 				queryStatement.setString(1, username);
 				ResultSet rs = queryStatement.executeQuery();
 				while (rs.next()) {
+					String id = rs.getString("id");
 					String user = rs.getString("name");
 					String hashedPassword = rs.getString("passwd");
 					if (user.equals(username)) { // should match since the SQL query...
@@ -166,11 +208,12 @@ public class Database implements DatabaseInterface {
 
 	private boolean initializeDatabase() throws SQLException {
 		if (null != connection) {
-			String createUsersString = "create table users " + 
-					"(name varchar(32) NOT NULL, " +
+			String createUsersString = "create table user " + 
+					"(id varchar(32) NOT NULL, " +
+					"name varchar(32) NOT NULL, " +
 					"passwd varchar(32) NOT NULL, " +
 					"email varchar(32) NOT NULL, " +
-					"PRIMARY KEY (name))";
+					"PRIMARY KEY (id))";
 			Statement createStatement = connection.createStatement();
 			createStatement.executeUpdate(createUsersString);
 			createStatement.close();

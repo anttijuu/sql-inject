@@ -9,6 +9,7 @@ public interface DatabaseInterface {
 	void close();
 	List<User> getAllUsers();
 	boolean addUser(User user) throws SQLException;
+	boolean saveUser(User user) throws SQLException;
 	boolean isUserNameRegistered(String username);
 	boolean isRegisteredUser(String username, String password);
 }
