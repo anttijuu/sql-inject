@@ -33,7 +33,7 @@ public class UserView extends JPanel implements ActionListener, UsersModelObserv
 	private User user;
 
 	public UserView(UsersModel model) {
-		super();
+		super(new BorderLayout());
 		this.model = model;
 		this.user = null;
 		setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
