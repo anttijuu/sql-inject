@@ -44,7 +44,7 @@ public class BadDatabase implements DatabaseInterface {
 		addUser(user);
 		user = new User("Jouni", "kalakana", "jouni@oulu.fi");
 		addUser(user);
-		user = new User("Mikko", "123456", "jouni@oulu.fi");
+		user = new User("Mikko", "123456", "mikko@oulu.fi");
 		addUser(user);
 	}
 
@@ -69,9 +69,11 @@ public class BadDatabase implements DatabaseInterface {
 				Statement queryStatement = connection.createStatement();
 				ResultSet rs = queryStatement.executeQuery(queryUser);
 				while (rs.next()) {
-					String user = rs.getString("name");
-					String email = rs.getString("email");
-					User aUser = new User(user, "", email);
+					final String id = rs.getString("id");
+					final String user = rs.getString("name");
+					final String email = rs.getString("email");
+					final String passwd = rs.getString("passwd");
+					User aUser = new User(user, passwd, email);
 					users.add(aUser);
 				}
 				queryStatement.close();
@@ -85,12 +87,14 @@ public class BadDatabase implements DatabaseInterface {
 	public boolean addUser(User user) throws SQLException {
 		boolean result = false;
 		if (null != connection && !isUserNameRegistered(user.getName())) {
-			String sqlStatement = "insert into user (name, passwd, email) values ('";
+			String sqlStatement = "insert into user (id, name, passwd, email) values ('";
+			sqlStatement += user.getId() + "', '";
 			sqlStatement += user.getName() + "', '";
 			sqlStatement += user.getPassword() + "', '";
 			sqlStatement += user.getEmail() + "')";
 			Statement statement = connection.createStatement();
-			statement.execute(sqlStatement);
+			System.out.println(sqlStatement);
+			statement.executeUpdate(sqlStatement);
 			statement.close();
 			result = true;
 		} else {
@@ -102,13 +106,13 @@ public class BadDatabase implements DatabaseInterface {
 	@Override
 	public boolean saveUser(User user) throws SQLException {
 		boolean result = false;
-		if (null != connection && !isUserNameRegistered(user.getName())) {
+		if (null != connection) {
 			String updateUser = "update user set name='" + user.getName();
 			updateUser += "', passwd='" + user.getPassword();
 			updateUser += "', email='" +user.getEmail();
 			updateUser += "' where id='" + user.getId() + "'";
 			Statement statement = connection.createStatement();
-			statement.executeQuery(updateUser);
+			statement.executeUpdate(updateUser);
 			statement.close();
 			result = true;
 		} else {
@@ -172,10 +176,11 @@ public class BadDatabase implements DatabaseInterface {
 	private boolean initializeBadDatabase() throws SQLException {
 		if (null != connection) {
 			String createUsersString = "create table user " + 
-					"(name varchar(32) NOT NULL, " +
-					"passwd varchar(32) NOT NULL, " +
-					"email varchar(32) NOT NULL, " +
-					"PRIMARY KEY (name))";
+				"(id varchar(32) NOT NULL, " +
+				"name varchar(32) NOT NULL, " +
+				"passwd varchar(32) NOT NULL, " +
+				"email varchar(32) NOT NULL, " +
+				"PRIMARY KEY (id))";
 			Statement createStatement = connection.createStatement();
 			createStatement.executeUpdate(createUsersString);
 			createStatement.close();

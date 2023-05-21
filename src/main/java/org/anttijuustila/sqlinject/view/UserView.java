@@ -99,10 +99,10 @@ public class UserView extends JPanel implements ActionListener, UsersModelObserv
 				}
 			}
 		} else if (e.getActionCommand().equals("new")) {
-			if (null != user) {
-				final String name = nameText.getText();
-				final String email = emailText.getText();
-				final String passwd = passWordText.getText();
+			final String name = nameText.getText();
+			final String email = emailText.getText();
+			final String passwd = passWordText.getText();
+			if (name.length() > 0) {
 				User newUser = new User(name, passwd, email);
 				try {
 					model.add(newUser);
@@ -110,7 +110,7 @@ public class UserView extends JPanel implements ActionListener, UsersModelObserv
 					JOptionPane.showMessageDialog(this, "Something wrong with database: " + e1.getMessage(),
 							"Could not add new User",
 							JOptionPane.ERROR_MESSAGE);
-				}
+				}	
 			}
 		}
 	}

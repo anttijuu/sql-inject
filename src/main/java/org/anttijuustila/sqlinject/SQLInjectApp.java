@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import org.anttijuustila.sqlinject.model.GoodDatabase;
+import org.anttijuustila.sqlinject.model.BadDatabase;
 import org.anttijuustila.sqlinject.model.DatabaseInterface;
 import org.anttijuustila.sqlinject.view.UserView;
 import org.anttijuustila.sqlinject.view.UsersListView;
@@ -30,8 +31,10 @@ public class SQLInjectApp
 
     private void run() {
         try {
-            database = GoodDatabase.getInstance();
-            database.open("users.sqlite");
+            // database = GoodDatabase.getInstance();
+            // database.open("users-good.sqlite");
+            database = BadDatabase.getInstance();
+            database.open("users-bad.sqlite");
             mainFrame = new JFrame("SQL Injection");
             mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             Container container = mainFrame.getContentPane();
