@@ -5,7 +5,6 @@ import java.awt.Container;
 import java.sql.SQLException;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import org.anttijuustila.sqlinject.model.GoodDatabase;

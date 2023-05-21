@@ -73,7 +73,7 @@ public class BadDatabase implements DatabaseInterface {
 					final String user = rs.getString("name");
 					final String email = rs.getString("email");
 					final String passwd = rs.getString("passwd");
-					User aUser = new User(user, passwd, email);
+					User aUser = new User(id, user, passwd, email);
 					users.add(aUser);
 				}
 				queryStatement.close();

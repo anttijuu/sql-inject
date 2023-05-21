@@ -97,12 +97,15 @@ public class GoodDatabase implements DatabaseInterface {
 		boolean result = false;
 		if (null != connection && !isUserNameRegistered(user.getName())) {
 			long timestamp = System.currentTimeMillis();
-			byte[] bytes = new byte[16];
-			secureRandom.nextBytes(bytes);
-			String salt = "$6$" + Base64.getEncoder().encodeToString(bytes);
-			String hashedPassword = Crypt.crypt(user.getPassword(), salt);
-			long duration = System.currentTimeMillis() - timestamp;
-			System.out.println("Hashing and salting took " + duration + " ms");	
+			String hashedPassword = user.getPassword();
+			if (hashedPassword.length() > 0) {
+				byte[] bytes = new byte[16];
+				secureRandom.nextBytes(bytes);
+				String salt = "$6$" + Base64.getEncoder().encodeToString(bytes);
+				hashedPassword = Crypt.crypt(user.getPassword(), salt);
+				long duration = System.currentTimeMillis() - timestamp;
+				System.out.println("Hashing and salting took " + duration + " ms");	
+			}
 			String insertUser = "insert into user values (?, ?, ?, ?)";
 			PreparedStatement statement = connection.prepareStatement(insertUser);
 			statement.setString(1, user.getId());
