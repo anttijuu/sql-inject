@@ -2,7 +2,7 @@
 
 Tämän yksinkertaisen esimerkkisovelluksen tarkoitus on näyttää, mitä tietokantaohjelmointia opetellessa **ei saa** tehdä ja mitä **pitää** sen sijaan tehdä (Java/JDBC).
 
-Yksi asioista joita ei saa tehdä on altistaa järjestelmä [SQL injektioille](https://fi.wikipedia.org/wiki/SQL-injektio). Tämä esimerkkisovellus näyttää mtien sellainen voi tapahtua, ja miten tietokantaohjelmointia pitää tehdä niin ettei SQL injektiota voi tapahtua. Toinen asia mitä tämä sovellus näyttää on se, miten salasanat pitää salata ennen niiden tallentamista tietokantaan.
+Yksi asioista joita ei saa tehdä on altistaa järjestelmä [SQL injektioille](https://fi.wikipedia.org/wiki/SQL-injektio). Tämä esimerkkisovellus näyttää miten sellainen voi tapahtua, ja miten tietokantaohjelmointia pitää tehdä niin ettei SQL injektiota voi tapahtua. Toinen asia mitä tämä sovellus näyttää on se, miten salasanat pitää salata ennen niiden tallentamista tietokantaan.
 
 ![Bobby tables](xkcd.png)
 
@@ -13,7 +13,7 @@ Projektissa on kaksi totetutusta tietokantaluokasta:
 1. `BadDatabase` joka ei tee tietokantakyselyitä kuten pitäisi, ja altistaa sovelluksen SQL Injection -hyökkäyksille.
 2. `GoodDatabase` joka tekee tietokantakyselyt prepared statement:eillä eikä siten ole altis SQL Injection -hyökkäyksille.
 
-Voit vaihtaa kumpasa tietokantatoteutusta käytät, luokan `SQLInjectionApp` metodissa `run()`. Oletusarvoisesti siellä käytetään huonoa toteutusta.
+Voit vaihtaa kumpaa tietokantatoteutusta käytät, luokan `SQLInjectionApp` metodissa `run()`. Oletusarvoisesti sovellus käyttää huonoa toteutusta.
 
 Lisäksi `GoodDatabase` salaa tallentamansa salasanat (hash+salt), toisin kuin `BadDatabase`, joka tallentaa salasanat salaamatta.
 

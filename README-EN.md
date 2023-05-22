@@ -1,8 +1,8 @@
 # SQL injection
 
-When learning database programming, there are things that **you must not** do. 
+When learning database programming, there are things that **you must not** do and instead, do the **correct** thing. 
 
-One of those is to avoid [SQL injection](https://en.wikipedia.org/wiki/SQL_injection). That is the main point of this simple example repository, implemented in Java/JDBC, using SQLite as the database. Another thing demonstrated here is how to save passwords salted and encrypted.
+One of things is to avoid is to enable [SQL injection](https://en.wikipedia.org/wiki/SQL_injection) attacks. That is the main point of this simple example repository, implemented in Java/JDBC. Another thing demonstrated here is how to save passwords unencrypted, and on the other hand, saving them salted and encrypted -- which you *should* do.
 
 ![Bobby tables](xkcd.png)
 
