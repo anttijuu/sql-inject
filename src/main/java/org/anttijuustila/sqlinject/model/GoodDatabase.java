@@ -1,7 +1,6 @@
 package org.anttijuustila.sqlinject.model;
 
 import java.io.File;
-import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -9,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 import org.apache.commons.codec.digest.Crypt;
@@ -18,7 +16,6 @@ public class GoodDatabase implements DatabaseInterface {
 	
 	private Connection connection = null;
 	private static DatabaseInterface singleton = null;
-	private SecureRandom secureRandom = null;
 
 	public static synchronized DatabaseInterface getInstance() {
 		if (null == singleton) {
@@ -28,7 +25,7 @@ public class GoodDatabase implements DatabaseInterface {
 	}
 
 	private GoodDatabase() {	
-		secureRandom = new SecureRandom();
+		// Empty
 	}
 
 	@Override
