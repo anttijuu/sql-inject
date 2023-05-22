@@ -1,10 +1,12 @@
 # SQL injection
 
-Mitä tietokantaohjelmointia opetellessa **ei saa** tehdä ja mitä **pitää** sen sijaan tehdä (Java/JDBC).
+Tämän yksinkertaisen esimerkkisovelluksen tarkoitus on näyttää, mitä tietokantaohjelmointia opetellessa **ei saa** tehdä ja mitä **pitää** sen sijaan tehdä (Java/JDBC).
+
+Yksi asioista joita ei saa tehdä on altistaa järjestelmä [SQL injektioille](https://fi.wikipedia.org/wiki/SQL-injektio). Tämä esimerkkisovellus näyttää mtien sellainen voi tapahtua, ja miten tietokantaohjelmointia pitää tehdä niin ettei SQL injektiota voi tapahtua. Toinen asia mitä tämä sovellus näyttää on se, miten salasanat pitää salata ennen niiden tallentamista tietokantaan.
 
 ![Bobby tables](xkcd.png)
 
-Katso myös [bobby-tables.com](https://bobby-tables.com).
+*Linkki:* [xkcd](https://xkcd.com/327/). Katso myös [bobby-tables.com](https://bobby-tables.com).
 
 Projektissa on kaksi totetutusta tietokantaluokasta:
 
@@ -20,11 +22,22 @@ Sanomattakin selvää on se, että *alusta asti* olisi syytä opetella tekemää
 1. Käytä *aina* prepared statementtejä kyselyiden tekemiseen, jos ne sisältävät parametreja.
 2. Salaa *aina* tallennetut salasanat käyttämällä suolaa ja tiivisteitä (salting & hashing).
 
+## Riippuvuudet
+
+Sovelluksen kääntäminen ja suorittaminen edellyttää seuraavia komponentteja:
+
+* SQLite; jos tämä ei ole jo asennettu koneellesi, asenna se.
+* `org.xerial.sqlite-jdbc` JDBC ajuri SQLite:a varten, määritelty valmiiksi `pom.xml` -tiedostossa.
+* Apache `commons-codec`, määritelty valmiiksi `pom.xml` -tiedostossa.
+* Java Developer Kit (JDK) versio 18 tai uudempi.
+* Maven.
+
+
 ## Kääntäminen
 
-Projekti on tehty Mavenilla, joten voit avata sen missä vaan Mavenia tukevalla kehitystyökalulla (IDE; Visual Studio Code, Eclipse). Suorita ohjelma IDE:stä käsin; main -metodi löytyy luokasta `SQLInjectionApp`.
+Projekti on tehty Mavenilla, joten voit avata sen missä vaan Mavenia tukevalla kehitystyökalulla (IDE; Visual Studio Code, Eclipse, IntelliJ IDEA). Suorita ohjelma IDE:stä käsin; main -metodi löytyy luokasta `SQLInjectionApp`.
 
- Voit kääntää ohjelman komentoriviltä, jos olet jo asentanut JDK:n (18+) ja Mavenin.
+ Voit kääntää ohjelman komentoriviltä, jos olet jo asentanut JDK:n (versio 18+) ja Mavenin.
 
 Komentorivikäännös:
 
