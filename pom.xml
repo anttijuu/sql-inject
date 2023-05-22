@@ -6,11 +6,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.anttijuustila</groupId>
-  <artifactId>sql-injection</artifactId>
+  <artifactId>sql-inject</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <name>sql-injection</name>
-  <url>https://github.com/anttijuu/</url>
+  <url>https://github.com/anttijuu/sql-inject</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -32,7 +32,7 @@
   </dependencies>
 
   <build>
-		<sourceDirectory>src</sourceDirectory>
+		<sourceDirectory>src/main/java</sourceDirectory>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>

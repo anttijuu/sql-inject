@@ -31,10 +31,10 @@ public class SQLInjectApp
 
     private void run() {
         try {
-            // database = GoodDatabase.getInstance();
-            // database.open("users-good.sqlite");
-            database = BadDatabase.getInstance();
-            database.open("users-bad.sqlite");
+            database = GoodDatabase.getInstance();
+            database.open("users-good.sqlite");
+            // database = BadDatabase.getInstance();
+            // database.open("users-bad.sqlite");
             JFrame mainFrame = new JFrame("SQL Injection Demo");
             mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             Container container = mainFrame.getContentPane();

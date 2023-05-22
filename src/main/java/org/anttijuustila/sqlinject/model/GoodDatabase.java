@@ -96,15 +96,9 @@ public class GoodDatabase implements DatabaseInterface {
 	public boolean addUser(User user) throws SQLException {
 		boolean result = false;
 		if (null != connection && !isUserNameRegistered(user.getName())) {
-			long timestamp = System.currentTimeMillis();
 			String hashedPassword = user.getPassword();
 			if (hashedPassword.length() > 0) {
-				byte[] bytes = new byte[16];
-				secureRandom.nextBytes(bytes);
-				String salt = "$6$" + Base64.getEncoder().encodeToString(bytes);
-				hashedPassword = Crypt.crypt(user.getPassword(), salt);
-				long duration = System.currentTimeMillis() - timestamp;
-				System.out.println("Hashing and salting took " + duration + " ms");	
+				hashedPassword = Crypt.crypt(user.getPassword());
 			}
 			String insertUser = "insert into user values (?, ?, ?, ?)";
 			PreparedStatement statement = connection.prepareStatement(insertUser);
@@ -127,13 +121,7 @@ public class GoodDatabase implements DatabaseInterface {
 		if (null != connection) {
 			String hashedPassword = user.getPassword();
 			if (hashedPassword.length() > 0) {
-				long timestamp = System.currentTimeMillis();
-				byte[] bytes = new byte[16];
-				secureRandom.nextBytes(bytes);
-				String salt = "$6$" + Base64.getEncoder().encodeToString(bytes);
-				hashedPassword = Crypt.crypt(user.getPassword(), salt);
-				long duration = System.currentTimeMillis() - timestamp;
-				System.out.println("Hashing and salting took " + duration + " ms");		
+				hashedPassword = Crypt.crypt(user.getPassword());
 			}
 			String updateUser = "update user set name=?, passwd=?, email=? where id = ?";
 			PreparedStatement statement = connection.prepareStatement(updateUser);
@@ -187,7 +175,6 @@ public class GoodDatabase implements DatabaseInterface {
 				queryStatement.setString(1, username);
 				ResultSet rs = queryStatement.executeQuery();
 				while (rs.next()) {
-					String id = rs.getString("id");
 					String user = rs.getString("name");
 					String hashedPassword = rs.getString("passwd");
 					if (user.equals(username)) { // should match since the SQL query...
@@ -208,7 +195,6 @@ public class GoodDatabase implements DatabaseInterface {
 		}
 		return result;
 	}
-
 
 	private boolean initializeDatabase() throws SQLException {
 		if (null != connection) {
