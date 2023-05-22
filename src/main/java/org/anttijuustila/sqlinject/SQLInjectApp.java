@@ -22,7 +22,6 @@ import org.anttijuustila.sqlinject.viewmodel.UsersModel;
  */
 public class SQLInjectApp 
 {
-    private JFrame mainFrame;
     DatabaseInterface database;
     
     public static void main( String[] args )
@@ -36,7 +35,7 @@ public class SQLInjectApp
             // database.open("users-good.sqlite");
             database = BadDatabase.getInstance();
             database.open("users-bad.sqlite");
-            mainFrame = new JFrame("SQL Injection");
+            JFrame mainFrame = new JFrame("SQL Injection Demo");
             mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             Container container = mainFrame.getContentPane();
     

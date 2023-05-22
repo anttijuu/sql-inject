@@ -2,7 +2,6 @@ package org.anttijuustila.sqlinject.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -14,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import org.anttijuustila.sqlinject.model.User;
 import org.anttijuustila.sqlinject.viewmodel.UsersModel;
@@ -28,6 +28,7 @@ public class UserView extends JPanel implements ActionListener, UsersModelObserv
 
 	private JButton saveButton;
 	private JButton newButton;
+	private JButton testLoginButton;
 
 	private UsersModel model;
 	private User user;
@@ -61,6 +62,10 @@ public class UserView extends JPanel implements ActionListener, UsersModelObserv
 		newButton.setActionCommand("new");
 		newButton.addActionListener(this);
 		buttonsPanel.add(newButton);
+		testLoginButton = new JButton("Test Login");
+		testLoginButton.setActionCommand("test-login");
+		testLoginButton.addActionListener(this);
+		buttonsPanel.add(testLoginButton);
 
 		add(editorsPanel, BorderLayout.NORTH);
 		add(buttonsPanel, BorderLayout.SOUTH);
@@ -112,6 +117,8 @@ public class UserView extends JPanel implements ActionListener, UsersModelObserv
 							JOptionPane.ERROR_MESSAGE);
 				}	
 			}
+		} else if (e.getActionCommand().equals("test-login")) {
+			new TestLoginDialog(SwingUtilities.windowForComponent(this), model).setVisible(true);
 		}
 	}
 

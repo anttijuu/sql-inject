@@ -14,11 +14,11 @@ import org.anttijuustila.sqlinject.model.User;
 
 public class UsersModel extends AbstractListModel<User> implements ListSelectionListener {
 
-	private DatabaseInterface database;
-	private List<User> users;
-	private User selectedUser = null;
+	private transient DatabaseInterface database;
+	private transient List<User> users;
+	private transient User selectedUser = null;
 
-	private List<UsersModelObserver> observers;
+	private transient List<UsersModelObserver> observers;
 	
 	public UsersModel(DatabaseInterface database) {
 		super();
@@ -35,6 +35,10 @@ public class UsersModel extends AbstractListModel<User> implements ListSelection
 	public void update(User user) throws SQLException {
 		database.saveUser(user);
 		refresh();
+	}
+
+	public boolean verifyUser(String name, String password) throws SQLException {
+		return database.isRegisteredUser(name, password);
 	}
 
 	@Override
