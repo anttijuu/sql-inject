@@ -24,20 +24,23 @@ public class UsersListView extends JPanel implements ListDataListener {
 		usersList.addListSelectionListener(model);
 		usersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scrollPane = new JScrollPane(usersList);
-		scrollPane.setPreferredSize(new Dimension(300, 300));
+		scrollPane.setPreferredSize(new Dimension(256, 300));
 		model.addListDataListener(this);
 		add(scrollPane);
 	}
 
 	@Override
 	public void intervalAdded(ListDataEvent e) {
+		// Not used
 	}
 
 	@Override
 	public void intervalRemoved(ListDataEvent e) {
+		// Not used
 	}
 
 	@Override
 	public void contentsChanged(ListDataEvent e) {
+		// Not used
 	}
 }

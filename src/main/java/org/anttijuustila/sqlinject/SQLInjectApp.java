@@ -2,9 +2,11 @@ package org.anttijuustila.sqlinject;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.sql.SQLException;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import org.anttijuustila.sqlinject.model.GoodDatabase;
@@ -39,11 +41,15 @@ public class SQLInjectApp
             Container container = mainFrame.getContentPane();
     
             UsersModel usersModel = new UsersModel(database);
+
+            JPanel rootPanel = new JPanel(new BorderLayout(2, 2));
             UsersListView list = new UsersListView(usersModel);
-            container.add(list, BorderLayout.CENTER);
+            list.setMinimumSize(new Dimension(320, 320));
+            rootPanel.add(list, BorderLayout.LINE_START);
             UserView userView = new UserView(usersModel);
             usersModel.addObserver(userView);
-            container.add(userView, BorderLayout.LINE_END);
+            rootPanel.add(userView);
+            container.add(rootPanel, BorderLayout.CENTER);
 
             mainFrame.pack();
             mainFrame.setVisible(true);                
