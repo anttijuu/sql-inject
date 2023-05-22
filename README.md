@@ -22,6 +22,8 @@ Sanomattakin selvää on se, että *alusta asti* olisi syytä opetella tekemää
 1. Käytä *aina* prepared statementtejä kyselyiden tekemiseen, jos ne sisältävät parametreja.
 2. Salaa *aina* tallennetut salasanat käyttämällä suolaa ja tiivisteitä (salting & hashing).
 
+Havainnollistava demovideo sovelluksen käytöstä löytyy [YouTubesta](https://www.youtube.com/watch?v=FFOfpr61TFA).
+
 ## Riippuvuudet
 
 Sovelluksen kääntäminen ja suorittaminen edellyttää seuraavia komponentteja:
